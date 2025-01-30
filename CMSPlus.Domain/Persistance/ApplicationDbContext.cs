@@ -24,5 +24,11 @@ public class ApplicationDbContext : IdentityDbContext
     {
         builder.ApplyConfiguration(new TopicEntityConfiguration());
         base.OnModelCreating(builder);
+        
+        builder.Entity<CommentEntity>()
+            .HasOne(c => c.Topic)
+            .WithMany(t => t.Comments)
+            .HasForeignKey(c => c.TopicId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
