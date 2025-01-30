@@ -9,5 +9,6 @@ public static class Configurator
     public static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<ITopicService, TopicService>();
+        services.AddScoped<ICommentService, CommentService>();
     }
 }
