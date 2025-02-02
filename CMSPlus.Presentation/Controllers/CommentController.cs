@@ -10,11 +10,14 @@ public class CommentController:Controller
 {
     private readonly ICommentService _commentService;
     private readonly IMapper _mapper;
+    private readonly ITopicService _topicService;
 
-    public CommentController(ICommentService commentService, IMapper mapper)
+
+    public CommentController(ICommentService commentService, IMapper mapper, ITopicService topicService)
     {
         _commentService = commentService;
         _mapper = mapper;
+        _topicService = topicService;
     }
     
     [HttpGet]
@@ -35,8 +38,14 @@ public class CommentController:Controller
     {
         var topicEntity = _mapper.Map<CommentCreateModel, CommentEntity>(comment);
         await _commentService.Create(topicEntity);
+        var topic = await _topicService.GetById(comment.TopicId);
+        if (topic == null)
+        {
+            return NotFound("Topic not found.");
+        }
 
-        return RedirectToAction("Index", "Home");
+        // Redirect to the details page of the specific topic
+        return RedirectToAction("Details", "Topic", new { systemName = topic.SystemName });
     }
     
     [HttpGet]
