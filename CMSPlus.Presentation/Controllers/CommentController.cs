@@ -39,4 +39,11 @@ public class CommentController:Controller
         return RedirectToAction("Index", "Home");
     }
     
+    [HttpGet]
+    public async Task<IActionResult> Index(int topicId)
+    {
+        var comments =  await _commentService.GetCommentsByTopicId(topicId);
+        var commentToDisplay = _mapper.Map<IEnumerable<CommentEntity>, IEnumerable<CommentModel>>(comments);
+        return View(commentToDisplay);
+    }
 }
