@@ -12,5 +12,10 @@ public class TopicEntityConfiguration:IEntityTypeConfiguration<TopicEntity>
         builder.Property(x => x.Body).IsRequired();
         builder.Property(x => x.Title).IsRequired();
         builder.Property(x => x.SystemName).IsRequired();
+        
+        builder.HasMany(t => t.Comments)
+            .WithOne(c => c.Topic)
+            .HasForeignKey(c => c.TopicId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

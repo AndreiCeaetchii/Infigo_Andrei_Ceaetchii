@@ -23,6 +23,13 @@ public class ApplicationDbContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfiguration(new TopicEntityConfiguration());
+        builder.ApplyConfiguration(new CommentEntityConfiguration());
         base.OnModelCreating(builder);
+        
+        builder.Entity<CommentEntity>()
+            .HasOne(c => c.Topic)
+            .WithMany(t => t.Comments)
+            .HasForeignKey(c => c.TopicId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
